@@ -1,5 +1,6 @@
 # Python
 import json
+from colorama import Fore
 # Modules
 from .generics import log_success, log_main
 
@@ -18,28 +19,22 @@ def log_request(req, verbose: bool = False) -> None:
     log_data = []
     url = req.url
     method = req.method
-    log_data.append("=====> ")
-    log_data.append("Making {} request to: {} \n".format(method, url))
+    # log_data.append("=====> ")
+    # log_data.append("Making {} request to: {} \n".format(method, url))
 
     if verbose:
         headers = req.headers
         body = req.body
-        title = req.title
 
-        if title is not None:
-            log_data.insert(0, "\n{} \n".format("-"*8))
-            log_data.insert(1, "{}{} \n".format("-"*8, title.upper()))
-            log_data.insert(2, "{} \n".format("-"*8))
-
-        if body is not None:
-            json_body = body.decode("utf-8")
-            log_data.append("BODY: {}\n".format(json_body))
+        print('{0}{1}{2} {3}'.format(Fore.BLUE, method, Fore.GREEN, url))
 
         if headers is not None:
             for name, value in headers.items():
                 __print_header(name, value)
 
-    log_main("".join(log_data))
+        if body is not None:
+            json_body = body.decode("utf-8")
+            print(json.dumps(json.loads(json_body), indent=2))
 
 
 def log_request_response(response, verbose=False):
@@ -52,14 +47,11 @@ def log_request_response(response, verbose=False):
     else:
         __print_request_part("[{}] {}".format(response.status_code, response.url), "response")
         for name, value in response.headers.items():
-            # print('{0}{1}{2}: {3}'.format(COLOR_GREEN, name, COLOR_END, value))
             __print_header(name, value)
-        __print_request_part(__parse_body(response), "body")
+        print(__parse_body(response))
 
 def __print_header(name: str, value: str) -> None:
-    COLOR_GREEN = '\033[92m'
-    COLOR_END = '\033[0m'
-    print('{0}{1}{2}: {3}'.format(COLOR_GREEN, name, COLOR_END, value))
+    print('{0}{1}{2}: {3}'.format(Fore.LIGHTGREEN_EX, name, Fore.WHITE, value))
 
 
 def __print_request_part(data, part):
