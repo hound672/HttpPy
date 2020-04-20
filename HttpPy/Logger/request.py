@@ -31,19 +31,19 @@ def log_request(req, verbose: bool = False) -> None:
             log_data.insert(1, "{}{} \n".format("-"*8, title.upper()))
             log_data.insert(2, "{} \n".format("-"*8))
 
-        if headers is not None:
-            log_data.append("HEADERS: {}\n".format(str(headers)))
         if body is not None:
             json_body = body.decode("utf-8")
             log_data.append("BODY: {}\n".format(json_body))
+
+        if headers is not None:
+            for name, value in headers.items():
+                __print_header(name, value)
 
     log_main("".join(log_data))
 
 
 def log_request_response(response, verbose=False):
     log_data = []
-    COLOR_GREEN = '\033[92m'
-    COLOR_END = '\033[0m'
 
     if not verbose:
         log_data.append("<===== ")
@@ -51,10 +51,15 @@ def log_request_response(response, verbose=False):
         log_success("".join(log_data))
     else:
         __print_request_part("[{}] {}".format(response.status_code, response.url), "response")
-        # __print_request_part(response.headers, "headers")
         for name, value in response.headers.items():
-            print('{0}{1}{2}: {3}'.format(COLOR_GREEN, name, COLOR_END, value))
+            # print('{0}{1}{2}: {3}'.format(COLOR_GREEN, name, COLOR_END, value))
+            __print_header(name, value)
         __print_request_part(__parse_body(response), "body")
+
+def __print_header(name: str, value: str) -> None:
+    COLOR_GREEN = '\033[92m'
+    COLOR_END = '\033[0m'
+    print('{0}{1}{2}: {3}'.format(COLOR_GREEN, name, COLOR_END, value))
 
 
 def __print_request_part(data, part):
