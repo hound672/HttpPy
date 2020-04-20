@@ -9,7 +9,7 @@ def __parse_body(response):
     content_type = response.headers.get('Content-Type')
     if response.text and content_type:
         if "application/json" in content_type:
-            return json.dumps(json.loads(response.text), indent=2)
+            return json.dumps(json.loads(response.text), indent=4)
         else:
             return response.text
     return ""
@@ -34,7 +34,7 @@ def log_request(req, verbose: bool = False) -> None:
 
         if body is not None:
             json_body = body.decode("utf-8")
-            print(json.dumps(json.loads(json_body), indent=2))
+            print(json.dumps(json.loads(json_body), indent=4))
 
 
 def log_request_response(response, verbose=False):
