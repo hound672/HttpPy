@@ -45,7 +45,7 @@ def log_request_response(response, verbose=False):
         log_data.append("{}\n".format(response.status_code))
         log_success("".join(log_data))
     else:
-        __print_request_part("{0}[{1}]{2} {3}".format(Fore.BLUE, response.status_code, Fore.WHITE, response.url), "response")
+        __print_request_part("{0}[{1}]{2} {3}".format(Fore.BLUE, response.status_code, Fore.GREEN, response.url), "response")
         for name, value in response.headers.items():
             __print_header(name, value)
         print(__parse_body(response))
