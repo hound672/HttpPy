@@ -42,6 +42,8 @@ def log_request(req, verbose: bool = False) -> None:
 
 def log_request_response(response, verbose=False):
     log_data = []
+    COLOR_GREEN = '\033[92m'
+    COLOR_END = '\033[0m'
 
     if not verbose:
         log_data.append("<===== ")
@@ -49,7 +51,9 @@ def log_request_response(response, verbose=False):
         log_success("".join(log_data))
     else:
         __print_request_part("[{}] {}".format(response.status_code, response.url), "response")
-        __print_request_part(response.headers, "headers")
+        # __print_request_part(response.headers, "headers")
+        for name, value in response.headers.items():
+            print('{0}{1}{2}: {3}'.format(COLOR_GREEN, name, COLOR_END, value))
         __print_request_part(__parse_body(response), "body")
 
 
